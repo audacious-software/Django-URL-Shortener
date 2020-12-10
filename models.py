@@ -1,6 +1,9 @@
+import json
+
 from django.db import models
 
 from django.conf import settings
+from django.urls import reverse
 
 class Link(models.Model):
     tracking_code = models.CharField(max_length=32, unique=True)
@@ -11,15 +14,15 @@ class Link(models.Model):
     metadata = models.TextField(max_length=1048576, default='{}')
 
     def __str__(self):
-        return self.original_url
+        return str(self.original_url)
 
     def get_absolute_url(self):
         return settings.URL_TRACKER_PREFIX + reverse('url_tracker', args=[self.tracking_code])
 
     def fetch_short_url(self):
         if self.external_url is None:
-	        self.external_url = self.get_absolute_url()
-	        self.save()
+            self.external_url = self.get_absolute_url()
+            self.save()
 
         return self.external_url
 
