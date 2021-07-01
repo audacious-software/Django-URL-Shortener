@@ -106,7 +106,7 @@ def create_link(request):
 
 @csrf_exempt
 def fetch_links_json(request):
-    if request.method == 'POST':
+    if request.method == 'POST': # pylint: disable=too-many-nested-blocks
         signature = binascii.unhexlify(request.POST.get('signature'))
 
         for client in APIClient.objects.all():
@@ -122,14 +122,14 @@ def fetch_links_json(request):
                         verify_key.verify(signature_value.encode('utf8'), signature)
 
                         payload = []
-                        
+
                         for link in Link.objects.filter(metadata__icontains=client.client_id).order_by('-pk'):
                             link_payload = {
                                 'original': link.original_url,
                                 'short_url': link.fetch_short_url(),
                                 'created': link.created.isoformat()
                             }
-                            
+
                             payload.append(link_payload)
 
                         return JsonResponse(payload, safe=False, json_dumps_params={'indent': 2})

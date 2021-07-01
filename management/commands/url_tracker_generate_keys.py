@@ -1,8 +1,5 @@
 # pylint: disable=no-member
 
-import binascii
-import json
-
 from nacl.encoding import HexEncoder
 from nacl.signing import SigningKey
 
