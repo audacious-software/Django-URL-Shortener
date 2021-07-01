@@ -3,6 +3,7 @@
 # -*- coding: utf-8 -*-
 
 import binascii
+import datetime
 import json
 import random
 import string
@@ -15,6 +16,7 @@ from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import Http404, HttpResponseForbidden, JsonResponse
 from django.shortcuts import redirect, render
+from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Link, APIClient
@@ -45,9 +47,6 @@ def create_link(request):
             verify_key = VerifyKey(binascii.unhexlify(client.verification_key))
 
             try:
-                print('URL: ' + str(url))
-                print('SIG: ' + str(signature))
-
                 verify_key.verify(url.encode('utf8'), signature)
 
                 # Signature passed
@@ -91,6 +90,8 @@ def create_link(request):
                         tracking_code = ''.join(random.SystemRandom().choice(string.ascii_lowercase + string.digits) for _ in range(settings.URL_SHORTENER_CODE_LENGTH))
 
                 new_link = Link(original_url=url, tracking_code=tracking_code)
+                new_link.metadata = json.dumps(metadata, indent=2)
+
                 new_link.save()
 
                 payload = {
@@ -99,7 +100,40 @@ def create_link(request):
 
                 return JsonResponse(payload, json_dumps_params={'indent': 2})
             except nacl.exceptions.BadSignatureError:
-                print('BAD KEY: ' + str(client))
-                # pass # signature failed
+                pass # signature failed
+
+    return HttpResponseForbidden()
+
+@csrf_exempt
+def fetch_links_json(request):
+    if request.method == 'POST':
+        signature = binascii.unhexlify(request.POST.get('signature'))
+
+        for client in APIClient.objects.all():
+            verify_key = VerifyKey(binascii.unhexlify(client.verification_key))
+
+            now = timezone.now()
+
+            for i in range(0, 5):
+                for j in [-1, 1]:
+                    signature_value = (now + datetime.timedelta(minutes=(i * j))).isoformat()[:16]
+
+                    try:
+                        verify_key.verify(signature_value.encode('utf8'), signature)
+
+                        payload = []
+                        
+                        for link in Link.objects.filter(metadata__icontains=client.client_id).order_by('-pk'):
+                            link_payload = {
+                                'original': link.original_url,
+                                'short_url': link.fetch_short_url(),
+                                'created': link.created.isoformat()
+                            }
+                            
+                            payload.append(link_payload)
+
+                        return JsonResponse(payload, safe=False, json_dumps_params={'indent': 2})
+                    except nacl.exceptions.BadSignatureError:
+                        pass # signature failed
 
     return HttpResponseForbidden()

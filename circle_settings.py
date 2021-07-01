@@ -63,8 +63,8 @@ WSGI_APPLICATION = 'pdk.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE':   'django.db.backends.postgresql',
-        'NAME':     'travisci',
-        'USER':     'postgres',
+        'NAME':     'circle_test',
+        'USER':     'root',
         'PASSWORD': '',
         'HOST':     'localhost',
         'PORT':     '',
