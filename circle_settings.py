@@ -40,7 +40,7 @@ MIDDLEWARE = (
     'django.middleware.security.SecurityMiddleware',
 )
 
-ROOT_URLCONF = 'url_shortener.travis_urls'
+ROOT_URLCONF = 'url_shortener.circle_urls'
 
 TEMPLATES = [
     {
