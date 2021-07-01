@@ -1,5 +1,7 @@
 # pylint: disable=no-member
 
+from __future__ import print_function
+
 from nacl.encoding import HexEncoder
 from nacl.signing import SigningKey
 
