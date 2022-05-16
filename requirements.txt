@@ -1,10 +1,10 @@
+bandit==1.7.0; python_version >= '3.0'
 bandit==1.6.2; python_version < '3.0'
-bandit==1.6.3; python_version >= '3.0'
 Django==1.11.29; python_version < '3.0'
-Django==2.2.24; python_version >= '3.0'
-psycopg2-binary==2.8.5
-pylint==2.6.0; python_version >= '3.0'
+Django==3.2.13; python_version >= '3.0'
+psycopg2-binary==2.8.6; python_version < '3.0'
+psycopg2-binary==2.9.1; python_version >= '3.0'
+pylint==2.11.1; python_version >= '3.0'
 pylint==1.9.5; python_version < '3.0'
 PyNaCl==1.4.0
-pytz==2021.1
-
+pytz==2021.3
