@@ -124,11 +124,21 @@ def fetch_links_json(request):
                         payload = []
 
                         for link in Link.objects.filter(metadata__icontains=client.client_id).order_by('-pk'):
+                            metadata = json.loads(link.metadata)
+
                             link_payload = {
                                 'original': link.original_url,
                                 'short_url': link.fetch_short_url(),
-                                'created': link.created.isoformat()
+                                'created': link.created.isoformat(),
+                                'visits': [],
+                                'client_metadata': metadata.get('client_metadata', '')
                             }
+
+                            for visit in link.visits.order_by('-visited'):
+                                link_payload['visits'].append({
+                                    'visited': visit.visited.isoformat(),
+                                    'user_agent': visit.user_agent
+                                })
 
                             payload.append(link_payload)
 
