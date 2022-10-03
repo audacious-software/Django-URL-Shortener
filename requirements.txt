@@ -1,4 +1,4 @@
-bandit==1.7.0; python_version >= '3.0'
+bandit==1.7.4; python_version >= '3.0'
 bandit==1.6.2; python_version < '3.0'
 Django==1.11.29; python_version < '3.0'
 Django==3.2.15; python_version >= '3.0'
