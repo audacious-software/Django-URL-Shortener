@@ -116,7 +116,7 @@ def fetch_links_json(request):
 
             for i in range(0, 5):
                 for j in [-1, 1]:
-                    signature_value = (now + datetime.timedelta(minutes=(i * j))).isoformat()[:16]
+                    signature_value = (now + datetime.timedelta(minutes=(i * j))).isoformat()[:16] # pylint: disable=superfluous-parens
 
                     try:
                         verify_key.verify(signature_value.encode('utf8'), signature)
