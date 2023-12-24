@@ -20,8 +20,25 @@ class Link(models.Model):
 
     metadata = models.TextField(max_length=1048576, default='{}')
 
+    client_id = models.CharField(max_length=4096, null=True, blank=True, db_index=True)
+
     def __str__(self):
         return str(self.original_url) + ' (' + self.tracking_code + ')'
+
+    def fetch_client_id(self):
+        if self.client_id is not None:
+            return self.client_id
+
+        metadata = json.loads(self.metadata)
+
+        client_id = metadata.get('api_client', None)
+
+        if client_id is not None:
+            self.client_id = client_id
+
+            self.save()
+
+        return self.client_id
 
     def get_absolute_url(self):
         return settings.URL_TRACKER_PREFIX + reverse('url_tracker', args=[self.tracking_code])

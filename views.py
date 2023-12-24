@@ -94,6 +94,8 @@ def create_link(request):
 
                 new_link.save()
 
+                new_link.fetch_client_id()
+
                 payload = {
                     'short_url': new_link.fetch_short_url()
                 }
@@ -123,7 +125,7 @@ def fetch_links_json(request):
 
                         payload = []
 
-                        for link in Link.objects.filter(metadata__icontains=client.client_id).order_by('-pk'):
+                        for link in Link.objects.filter(client_id=client.client_id).order_by('-pk'):
                             metadata = json.loads(link.metadata)
 
                             link_payload = {

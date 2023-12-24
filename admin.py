@@ -6,9 +6,9 @@ from .models import Link, LinkVisit, APIClient
 
 @admin.register(Link)
 class LinkAdmin(admin.ModelAdmin):
-    list_display = ('tracking_code', 'original_url', 'external_url', 'created',)
-    search_fields = ('tracking_code', 'original_url', 'external_url', 'metadata')
-    list_filter = ('created',)
+    list_display = ('tracking_code', 'original_url', 'external_url', 'created', 'client_id',)
+    search_fields = ('tracking_code', 'original_url', 'external_url', 'client_id', 'metadata',)
+    list_filter = ('created', 'client_id',)
 
 @admin.register(LinkVisit)
 class LinkVisitAdmin(admin.ModelAdmin):
