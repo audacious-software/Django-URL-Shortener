@@ -14,13 +14,15 @@ from django.urls import reverse
 
 class Link(models.Model):
     tracking_code = models.CharField(max_length=32, unique=True)
-    original_url = models.URLField(max_length=4096)
+    original_url = models.URLField(max_length=4096, verbose_name='Original URL')
     created = models.DateTimeField(auto_now_add=True)
-    external_url = models.URLField(max_length=4096)
+    external_url = models.URLField(max_length=4096, verbose_name='External URL')
 
     metadata = models.TextField(max_length=1048576, default='{}')
 
-    client_id = models.CharField(max_length=4096, null=True, blank=True, db_index=True)
+    client_id = models.CharField(max_length=4096, null=True, blank=True, db_index=True, verbose_name='Client ID')
+
+    last_click = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return str(self.original_url) + ' (' + self.tracking_code + ')'
@@ -114,11 +116,16 @@ def generate_client_id(length=64):
 
 
 class APIClient(models.Model):
-    contact_email = models.EmailField(max_length=1024, unique=True)
-    client_id = models.CharField(max_length=64, unique=True, default=generate_client_id)
+    class Meta: # pylint: disable=too-few-public-methods
+        verbose_name = 'API client'
+
+    contact_email = models.EmailField(max_length=1024, unique=True, verbose_name='Contact e-mail')
+    client_id = models.CharField(max_length=64, unique=True, default=generate_client_id, verbose_name='Client ID')
 
     signing_key = models.CharField(max_length=1024, null=True, blank=True)
     verification_key = models.CharField(max_length=1024, null=True, blank=True)
+
+    query_window_days = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return str(self.contact_email)

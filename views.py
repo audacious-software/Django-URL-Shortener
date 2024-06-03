@@ -14,6 +14,7 @@ from nacl.signing import VerifyKey
 
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
+from django.db.models import Q
 from django.http import Http404, HttpResponseForbidden, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
@@ -107,7 +108,7 @@ def create_link(request):
     return HttpResponseForbidden()
 
 @csrf_exempt
-def fetch_links_json(request):
+def fetch_links_json(request, since_days=None): # pylint: disable=too-many-locals, too-many-branches
     if request.method == 'POST': # pylint: disable=too-many-nested-blocks
         signature = binascii.unhexlify(request.POST.get('signature'))
 
@@ -125,8 +126,20 @@ def fetch_links_json(request):
 
                         payload = []
 
-                        for link in Link.objects.filter(client_id=client.client_id).order_by('-pk'):
+                        if since_days is None:
+                            if client.query_window_days is not None:
+                                since_days = client.query_window_days
+                            else:
+                                since_days = 90
+
+                        start_window = timezone.now() - datetime.timedelta(days=since_days)
+
+                        link_filter = Q(last_click=None) | Q(last_click__gte=start_window)
+
+                        for link in Link.objects.filter(client_id=client.client_id).filter(link_filter).order_by('-pk'):
                             metadata = json.loads(link.metadata)
+
+                            link_updated = False
 
                             link_payload = {
                                 'original': link.original_url,
@@ -136,13 +149,22 @@ def fetch_links_json(request):
                                 'client_metadata': metadata.get('client_metadata', '')
                             }
 
-                            for visit in link.visits.order_by('-visited'):
+                            for visit in link.visits.filter(visited__gte=start_window).order_by('-visited'):
                                 link_payload['visits'].append({
                                     'visited': visit.visited.isoformat(),
                                     'user_agent': visit.user_agent
                                 })
 
-                            payload.append(link_payload)
+                                if link.last_click is None or link.last_click < visit.visited:
+                                    link.last_click = visit.visited
+
+                                    link_updated = True
+
+                            if len(link_payload['visits']) > 0:
+                                payload.append(link_payload)
+
+                            if link_updated:
+                                link.save()
 
                         return JsonResponse(payload, safe=False, json_dumps_params={'indent': 2})
                     except nacl.exceptions.BadSignatureError:
