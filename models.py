@@ -116,7 +116,7 @@ def generate_client_id(length=64):
 
 
 class APIClient(models.Model):
-    class Meta: # pylint: disable=too-few-public-methods
+    class Meta: # pylint: disable=too-few-public-methods, no-init, old-style-class
         verbose_name = 'API client'
 
     contact_email = models.EmailField(max_length=1024, unique=True, verbose_name='Contact e-mail')

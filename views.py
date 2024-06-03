@@ -160,7 +160,7 @@ def fetch_links_json(request, since_days=None): # pylint: disable=too-many-local
 
                                     link_updated = True
 
-                            if len(link_payload['visits']) > 0:
+                            if len(link_payload['visits']) > 0: # pylint: disable=len-as-condition
                                 payload.append(link_payload)
 
                             if link_updated:
