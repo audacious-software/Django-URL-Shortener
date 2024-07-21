@@ -39,7 +39,7 @@ jobs:
             mv project url_shortener
             mkdir django
             cd django
-            django-admin.py startproject us
+            django-admin startproject us
             mv ../url_shortener us
             cd us
             cp url_shortener/circle_settings.py us/settings.py
@@ -85,7 +85,7 @@ jobs:
             mv project url_shortener
             mkdir django
             cd django
-            django-admin.py startproject us
+            django-admin startproject us
             mv ../url_shortener us
             cd us
             cp url_shortener/circle_settings.py us/settings.py
@@ -131,7 +131,7 @@ jobs:
             mv project url_shortener
             mkdir django
             cd django
-            django-admin.py startproject us
+            django-admin startproject us
             mv ../url_shortener us
             cd us
             cp url_shortener/circle_settings.py us/settings.py
@@ -177,7 +177,7 @@ jobs:
             mv project url_shortener
             mkdir django
             cd django
-            django-admin.py startproject us
+            django-admin startproject us
             mv ../url_shortener us
             cd us
             cp url_shortener/circle_settings.py us/settings.py
