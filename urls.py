@@ -1,6 +1,6 @@
-import sys
+# pylint: disable=wrong-import-position
 
-import django
+import sys
 
 if sys.version_info[0] > 2:
     from django.urls import re_path as url
