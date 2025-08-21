@@ -40,7 +40,7 @@ MIDDLEWARE = (
     'django.middleware.security.SecurityMiddleware',
 )
 
-ROOT_URLCONF = 'url_shortener.circle_urls'
+ROOT_URLCONF = 'us.circle_urls'
 
 TEMPLATES = [
     {
@@ -58,7 +58,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'pdk.wsgi.application'
+WSGI_APPLICATION = 'us.wsgi.application'
 
 DATABASES = {
     'default': {
