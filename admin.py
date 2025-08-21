@@ -32,6 +32,8 @@ class LinkVisitAdmin(admin.ModelAdmin):
     search_fields = ('link', 'metadata',)
     list_filter = ('visited',)
 
+    readonly_fields = ('link',)
+
 @admin.register(APIClient)
 class APIClientAdmin(admin.ModelAdmin):
     list_display = ('contact_email', 'client_id',)
