@@ -1,0 +1,54 @@
+name: url-shortener
+
+services:
+  # db:
+  #   image: postgis/postgis:16-3.4
+  #   hostname: db
+  #   volumes:
+  #     - url-shortener-db:/var/lib/postgresql/data
+  #   environment:
+  #     - POSTGRES_DB=${PG_DB}
+  #     - POSTGRES_USER=${PG_USER}
+  #     - POSTGRES_PASSWORD=${PG_PASSWORD}
+  #   healthcheck:
+  #     test: "psql -U ${PG_USER} -d ${PG_DB} -c 'SELECT PostGIS_Version();'"
+  #     interval: 1s
+  #     timeout: 5s
+  #     retries: 10
+
+  django:
+    platform: linux/amd64
+    build:
+      context: ..
+      dockerfile: docker/django/Dockerfile
+    env_file: .env
+    command: bash /app/run.sh
+    volumes:
+      - url-shortener-db:/app/db
+      - url-shortener-media:/app/media
+      - url-shortener-static:/app/static
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
+
+  nginx:
+    image: nginx
+    env_file: .env
+    volumes:
+      - ./nginx/templates:/etc/nginx/templates
+      - url-shortener-media:/app/media
+      - url-shortener-static:/app/static
+    ports:
+      - "${NGINX_WEB_PORT}:${NGINX_WEB_PORT}"
+    environment:
+      - NGINX_WEB_HOST=${NGINX_WEB_HOST}
+      - NGINX_WEB_PORT=${NGINX_WEB_PORT}
+      - DJANGO_WEB_PORT=${DJANGO_WEB_PORT}
+    depends_on:
+      django:
+        condition: service_started
+
+volumes:
+  url-shortener-db:
+  url-shortener-media:
+  url-shortener-static:
