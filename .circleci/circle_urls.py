@@ -7,7 +7,10 @@ if sys.version_info[0] > 2:
 else:
     from django.conf.urls import url, include
 
+from django.contrib import admin
+
 urlpatterns = [
+    url('^admin/', admin.site.urls),
     url(r'^admin/', include('django.contrib.admin.site.urls')),
     url(r'^docker/', include('docker_utils.urls')),
     url(r'^u/', include('url_shortener.urls')),
