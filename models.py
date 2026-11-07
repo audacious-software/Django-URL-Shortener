@@ -114,7 +114,6 @@ def generate_client_id(length=64):
 
     return identifier
 
-
 class APIClient(models.Model):
     class Meta: # pylint: disable=too-few-public-methods, no-init, old-style-class
         verbose_name = 'API client'
