@@ -9,5 +9,6 @@ else:
 
 urlpatterns = [
     url(r'^admin/', django.contrib.admin.site.urls),
+    url(r'^docker/', include('docker_utils.urls')),
     url(r'^u/', include('url_shortener.urls')),
 ]
