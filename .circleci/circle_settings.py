@@ -26,7 +26,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'docker_utils',
     'django.contrib.auth',
-    'url_shortener'
+    'url_shortener',
 )
 
 MIDDLEWARE = (
