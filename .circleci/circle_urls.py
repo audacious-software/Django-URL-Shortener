@@ -8,7 +8,7 @@ else:
     from django.conf.urls import url, include
 
 urlpatterns = [
-    url(r'^admin/', django.contrib.admin.site.urls),
+    url(r'^admin/', include('django.contrib.admin.site.urls')),
     url(r'^docker/', include('docker_utils.urls')),
     url(r'^u/', include('url_shortener.urls')),
 ]
