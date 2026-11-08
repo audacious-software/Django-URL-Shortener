@@ -44,7 +44,6 @@ jobs:
             mv ../url_shortener us
             cd us
             cp url_shortener/.circleci/circle_settings.py us/settings.py
-            cat us/settings.py
             cp url_shortener/.circleci/circle_urls.py us/urls.py
             git clone https://github.com/bric-digital/Docker-Utils-Django.git docker_utils
             python manage.py migrate
