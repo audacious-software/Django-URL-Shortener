@@ -4,12 +4,13 @@ WORKDIR /app
 
 RUN apt-get update
 RUN apt-get install -y apt-utils curl
-RUN apt-get install -y python3-dev gdal-bin python3-venv
+RUN apt-get install -y python3-dev python3-venv git
 
 RUN python3 -m venv /app/venv
 RUN . /app/venv/bin/activate && pip install -U wheel pip
 ADD ./requirements.txt /app/requirements.txt
 RUN . /app/venv/bin/activate && pip install -r requirements.txt
+RUN . git clone https://github.com/bric-digital/Docker-Utils-Django.git /app/docker_utils
 
 RUN . /app/venv/bin/activate && django-admin startproject live_site
 ADD . /app/live_site/url_shortener

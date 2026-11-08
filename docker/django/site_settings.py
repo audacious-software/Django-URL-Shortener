@@ -19,7 +19,6 @@ CSRF_TRUSTED_ORIGINS = ['https://%s' % os.getenv('DJANGO_ALLOWED_HOST', 'localho
 # Application definition
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -28,6 +27,8 @@ INSTALLED_APPS = (
     'django.contrib.gis',
     'prettyjson',
     'url_shortener',
+    'django.contrib.admin',
+    'docker_utils',
 )
 
 MIDDLEWARE = (
