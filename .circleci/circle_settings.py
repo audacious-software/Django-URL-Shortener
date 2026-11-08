@@ -20,12 +20,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
+    'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'docker_utils',
     'django.contrib.auth',
+    'docker_utils',
+    'django.contrib.admin',
     'url_shortener',
 )
 
