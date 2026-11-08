@@ -25,7 +25,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.auth',
     'docker_utils',
     'django.contrib.admin',
     'url_shortener',
