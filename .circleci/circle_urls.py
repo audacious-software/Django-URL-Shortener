@@ -9,7 +9,7 @@ else:
 from django.contrib import admin
 
 urlpatterns = [
-    url('^admin/', include('django.contrib.admin.urls')),
+    path('^admin/', admin.site.urls),
     url('^docker/', include('docker_utils.urls')),
     url('^u/', include('url_shortener.urls')),
 ]
