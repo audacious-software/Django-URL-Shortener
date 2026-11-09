@@ -6,6 +6,7 @@ import iso8601
 
 from django.contrib import messages
 from django.core import serializers
+from django.db import transaction, IntegrityError
 
 from .models import APIClient, Link, LinkVisit
 
@@ -33,37 +34,54 @@ def import_objects(file_type, import_file): # pylint: disable=too-many-branches
 
                     clients_imported += 1
                 elif item_json.get('model', None) == 'url_shortener.link':
-                    link_obj = Link()
+                    with transaction.atomic():
+                        link_obj = Link()
 
-                    for field_key in item_json.get('fields', {}).keys():
-                        field_value = item_json.get('fields', {}).get(field_key, None)
+                        created = None
+                        last_click = None
 
-                        if field_key in ('created', 'last_click'):
-                            if field_value is not None:
-                                field_value = iso8601.parse_date(field_value)
+                        for field_key in item_json.get('fields', {}).keys():
+                            field_value = item_json.get('fields', {}).get(field_key, None)
 
-                        setattr(link_obj, field_key, field_value)
+                            if field_key in ('created', 'last_click'):
+                                if field_value is not None:
+                                    field_value = iso8601.parse_date(field_value)
 
-                    link_obj.save()
+                                    if field_key == 'created':
+                                        created = field_value
 
-                    links_imported += 1
+                            setattr(link_obj, field_key, field_value)
 
-                    for visit in item_json.get('visits', []):
-                        if visit.get('model', None) == 'url_shortener.linkvisit':
-                            visit_obj = LinkVisit(link=link_obj)
+                        link_obj.save()
 
-                            for field_key in visit.get('fields', {}).keys():
-                                field_value = visit.get('fields', {}).get(field_key, None)
+                        link_obj.created = created
 
-                                if field_key == 'visited':
-                                    if field_value is not None:
-                                        field_value = iso8601.parse_date(field_value)
+                        link_obj.save()
 
-                                setattr(visit_obj, field_key, field_value)
+                        links_imported += 1
 
-                            visit_obj.save()
+                        for visit in item_json.get('visits', []):
+                            if visit.get('model', None) == 'url_shortener.linkvisit':
+                                visit_obj = LinkVisit(link=link_obj)
 
-                            visits_imported += 1
+                                visited = None
+
+                                for field_key in visit.get('fields', {}).keys():
+                                    field_value = visit.get('fields', {}).get(field_key, None)
+
+                                    if field_key == 'visited':
+                                        if field_value is not None:
+                                            field_value = iso8601.parse_date(field_value)
+                                            visited = field_value
+
+                                    setattr(visit_obj, field_key, field_value)
+
+                                visit_obj.save()
+
+                                visit_obj.visited = visited
+                                visit_obj.save()
+
+                                visits_imported += 1
 
             if clients_imported > 1:
                 user_messages.append(('%s API clients imported.' % clients_imported, messages.SUCCESS))

@@ -10,7 +10,6 @@ echo Initializing database and static resources...
 python3 manage.py migrate
 python3 manage.py collectstatic --no-input
 python3 manage.py loaddata /app/users.json
-python3 manage.py loaddata /app/pdk-test-data.json
 
 echo Validating installation...
 
@@ -22,7 +21,7 @@ python3 manage.py check
 
 echo Installing and starting gunicorn...
 pip install gunicorn
-gunicorn live_site.wsgi --log-file - --bind="0.0.0.0:$DJANGO_WEB_PORT"
+gunicorn live_site.wsgi --log-file - --timeout 900 --bind="0.0.0.0:$DJANGO_WEB_PORT"
 
 # Uncomment the line below if running on a local machine, and not a server container host.
 # echo Starting built-in Django web server...

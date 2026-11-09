@@ -105,7 +105,6 @@ class LinkVisit(models.Model):
 
     metadata = models.TextField(max_length=1048576, default='{}')
 
-
 def generate_client_id(length=64):
     identifier = None
 

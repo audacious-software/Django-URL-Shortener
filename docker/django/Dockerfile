@@ -10,10 +10,10 @@ RUN python3 -m venv /app/venv
 RUN . /app/venv/bin/activate && pip install -U wheel pip
 ADD ./requirements.txt /app/requirements.txt
 RUN . /app/venv/bin/activate && pip install -r requirements.txt
-RUN . git clone https://github.com/bric-digital/Docker-Utils-Django.git /app/docker_utils
 
 RUN . /app/venv/bin/activate && django-admin startproject live_site
 ADD . /app/live_site/url_shortener
+RUN git clone https://github.com/bric-digital/Docker-Utils-Django.git /app/live_site/docker_utils
 
 ADD ./docker/django/site_settings.py /app/live_site/live_site/settings.py
 ADD ./docker/django/site_urls.py /app/live_site/live_site/urls.py

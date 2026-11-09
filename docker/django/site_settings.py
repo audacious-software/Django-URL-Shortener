@@ -24,11 +24,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.gis',
     'prettyjson',
-    'url_shortener',
-    'django.contrib.admin',
     'docker_utils',
+    'django.contrib.admin',
+    'url_shortener',
 )
 
 MIDDLEWARE = (
