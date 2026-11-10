@@ -6,11 +6,11 @@ import iso8601
 
 from django.contrib import messages
 from django.core import serializers
-from django.db import transaction, IntegrityError
+from django.db import transaction
 
 from .models import APIClient, Link, LinkVisit
 
-def import_objects(file_type, import_file): # pylint: disable=too-many-branches
+def import_objects(file_type, import_file): # pylint: disable=too-many-branches, too-many-locals, too-many-statements
     if file_type in ('url_shortener.apiclient', 'url_shortener.link'):
         user_messages = []
 
@@ -38,7 +38,6 @@ def import_objects(file_type, import_file): # pylint: disable=too-many-branches
                         link_obj = Link()
 
                         created = None
-                        last_click = None
 
                         for field_key in item_json.get('fields', {}).keys():
                             field_value = item_json.get('fields', {}).get(field_key, None)
