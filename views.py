@@ -77,11 +77,11 @@ def url_tracker_qr_custom(request):
 
             img = qr_code.make_image(image_factory=PilImage, embedded_image_path=temp_file.name, embeded_image_ratio=0.2)
 
-    buffer = io.BytesIO()
+    img_buffer = io.BytesIO()
 
-    img.save(buffer, format='PNG')
+    img.save(img_buffer, format='PNG')
 
-    return HttpResponse(buffer.getvalue(), content_type='image/png')
+    return HttpResponse(img_buffer.getvalue(), content_type='image/png')
 
 @staff_member_required
 def create_link_page(request):
