@@ -32,7 +32,7 @@ jobs:
       - run:
           name: Build and validate
           command: |
-            sudo apt-get update && sudo apt-get install -y gdal-bin
+            sudo apt-get update && sudo apt-get install -y gdal-bin libjpeg-dev
             python3 -m venv /home/circleci/venv
             . /home/circleci/venv/bin/activate
             pip install wheel
@@ -80,7 +80,7 @@ jobs:
       - run:
           name: Build and validate
           command: |
-            sudo apt-get update && sudo apt-get install -y gdal-bin
+            sudo apt-get update && sudo apt-get install -y gdal-bin libjpeg-dev
             python3 -m venv /home/circleci/venv
             . /home/circleci/venv/bin/activate
             pip install wheel
@@ -128,7 +128,7 @@ jobs:
       - run:
           name: Build and validate
           command: |
-            sudo apt-get update && sudo apt-get install -y gdal-bin
+            sudo apt-get update && sudo apt-get install -y gdal-bin libjpeg-dev
             python3 -m venv /home/circleci/venv
             . /home/circleci/venv/bin/activate
             pip install wheel
@@ -176,7 +176,7 @@ jobs:
       - run:
           name: Build and validate
           command: |
-            sudo apt-get update && sudo apt-get install -y gdal-bin
+            sudo apt-get update && sudo apt-get install -y gdal-bin libjpeg-dev
             python3 -m venv /home/circleci/venv
             . /home/circleci/venv/bin/activate
             pip install wheel
@@ -224,7 +224,7 @@ jobs:
       - run:
           name: Build and validate
           command: |
-            sudo apt-get update && sudo apt-get install -y gdal-bin
+            sudo apt-get update && sudo apt-get install -y gdal-bin libjpeg-dev
             python3 -m venv /home/circleci/venv
             . /home/circleci/venv/bin/activate
             pip install wheel
@@ -272,7 +272,7 @@ jobs:
       - run:
           name: Build and validate
           command: |
-            sudo apt-get update && sudo apt-get install -y gdal-bin
+            sudo apt-get update && sudo apt-get install -y gdal-bin libjpeg-dev
             virtualenv /home/circleci/venv
             . /home/circleci/venv/bin/activate
             pip install wheel
