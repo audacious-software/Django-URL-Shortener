@@ -1,6 +1,4 @@
-# pylint: disable=no-member, line-too-long
-
-
+# pylint: disable=no-member, line-too-long, ungrouped-imports
 # -*- coding: utf-8 -*-
 
 import binascii
@@ -47,13 +45,13 @@ def url_tracker_qr(request, tracking_code): # pylint:disable=unused-argument
         qr_code.add_data(link.get_absolute_url())
         qr_code.make(fit=True)
 
-        buffer = io.BytesIO()
+        img_buffer = io.BytesIO()
 
         img = qr_code.make_image(fill_color='black', back_color='white')
 
-        img.save(buffer, format='PNG')
+        img.save(img_buffer, format='PNG')
 
-        return HttpResponse(buffer.getvalue(), content_type='image/png')
+        return HttpResponse(img_buffer.getvalue(), content_type='image/png')
 
     raise Http404
 
