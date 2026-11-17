@@ -52,6 +52,9 @@ class Link(models.Model):
 
         return self.external_url
 
+    def fetch_qrcode_url(self):
+        return settings.URL_TRACKER_PREFIX + reverse('url_tracker_qr', args=[self.tracking_code])
+
     def log_visit(self, request):
         visit = LinkVisit(link=self)
 

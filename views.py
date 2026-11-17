@@ -5,18 +5,23 @@
 
 import binascii
 import datetime
+import io
 import json
 import random
 import string
+import tempfile
 
 import nacl
+import qrcode
+import requests
 
 from nacl.signing import VerifyKey
+from qrcode.image.styledpil import StyledPilImage
 
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Q
-from django.http import Http404, HttpResponseForbidden, JsonResponse
+from django.http import Http404, HttpResponseForbidden, JsonResponse, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
@@ -32,6 +37,53 @@ def url_tracker(request, tracking_code):
         return redirect(link.original_url)
 
     raise Http404
+
+def url_tracker_qr(request, tracking_code): # pylint:disable=unused-argument
+    link = Link.objects.filter(tracking_code=tracking_code).first()
+
+    if link is not None:
+        qr_code = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_H, box_size=10)
+
+        qr_code.add_data(link.get_absolute_url())
+        qr_code.make(fit=True)
+
+        buffer = io.BytesIO()
+
+        img = qr_code.make_image(fill_color='black', back_color='white')
+
+        img.save(buffer, format='PNG')
+
+        return HttpResponse(buffer.getvalue(), content_type='image/png')
+
+    raise Http404
+
+def url_tracker_qr_custom(request):
+    data_string = request.GET.get('data', request.POST.get('data', 'No data provided.'))
+    image_url = request.GET.get('img', request.POST.get('img', None))
+
+    qr_code = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10)
+    qr_code.add_data(data_string)
+    qr_code.make(fit=True)
+
+    img = qr_code.make_image(fill_color='black')
+
+    if image_url is not None:
+        response = requests.get(image_url, timeout=120)
+
+        response.raise_for_status()
+
+        with tempfile.NamedTemporaryFile(delete=True, suffix='.jpg') as temp_file:
+            temp_file.write(response.content)
+
+            temp_file.flush()
+
+            img = qr_code.make_image(image_factory=StyledPilImage, embedded_image_path=temp_file.name, embeded_image_ratio=0.2)
+
+    buffer = io.BytesIO()
+
+    img.save(buffer, format='PNG')
+
+    return HttpResponse(buffer.getvalue(), content_type='image/png')
 
 @staff_member_required
 def create_link_page(request):
