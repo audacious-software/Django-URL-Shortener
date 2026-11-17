@@ -45,6 +45,7 @@ jobs:
             cd us
             cp url_shortener/.circleci/circle_settings.py us/settings.py
             cp url_shortener/.circleci/circle_urls.py us/urls.py
+            git clone https://github.com/bric-digital/Docker-Utils-Django.git docker_utils
             python manage.py migrate
             python manage.py test
             cp url_shortener/.pylintrc .
@@ -91,6 +92,7 @@ jobs:
             cd us
             cp url_shortener/.circleci/circle_settings.py us/settings.py
             cp url_shortener/.circleci/circle_urls.py us/urls.py
+            git clone https://github.com/bric-digital/Docker-Utils-Django.git docker_utils
             python manage.py migrate
             python manage.py test
             cp url_shortener/.pylintrc .
@@ -137,6 +139,7 @@ jobs:
             cd us
             cp url_shortener/.circleci/circle_settings.py us/settings.py
             cp url_shortener/.circleci/circle_urls.py us/urls.py
+            git clone https://github.com/bric-digital/Docker-Utils-Django.git docker_utils
             python manage.py migrate
             python manage.py test
             cp url_shortener/.pylintrc .
@@ -183,6 +186,7 @@ jobs:
             cd us
             cp url_shortener/.circleci/circle_settings.py us/settings.py
             cp url_shortener/.circleci/circle_urls.py us/urls.py
+            git clone https://github.com/bric-digital/Docker-Utils-Django.git docker_utils
             python manage.py migrate
             python manage.py test
             cp url_shortener/.pylintrc .
@@ -229,6 +233,7 @@ jobs:
             cd us
             cp url_shortener/.circleci/circle_settings.py us/settings.py
             cp url_shortener/.circleci/circle_urls.py us/urls.py
+            git clone https://github.com/bric-digital/Docker-Utils-Django.git docker_utils
             python manage.py migrate
             python manage.py test
             cp url_shortener/.pylintrc .
@@ -275,6 +280,7 @@ jobs:
             cd us
             cp url_shortener/.circleci/circle_settings.py us/settings.py
             cp url_shortener/.circleci/circle_urls.py us/urls.py
+            git clone https://github.com/bric-digital/Docker-Utils-Django.git docker_utils
             python manage.py migrate
             python manage.py test
             cp url_shortener/.pylintrc .

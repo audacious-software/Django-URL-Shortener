@@ -108,7 +108,6 @@ class LinkVisit(models.Model):
 
     metadata = models.TextField(max_length=1048576, default='{}')
 
-
 def generate_client_id(length=64):
     identifier = None
 
@@ -116,7 +115,6 @@ def generate_client_id(length=64):
         identifier = ''.join(random.SystemRandom().choice(string.ascii_lowercase + string.digits) for _ in range(length))
 
     return identifier
-
 
 class APIClient(models.Model):
     class Meta: # pylint: disable=too-few-public-methods, no-init, old-style-class
