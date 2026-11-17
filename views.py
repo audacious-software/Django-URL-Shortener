@@ -16,7 +16,7 @@ import qrcode
 import requests
 
 from nacl.signing import VerifyKey
-from qrcode.image.styledpil import StyledPilImage
+from qrcode.image.pil import PilImage
 
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
@@ -77,7 +77,7 @@ def url_tracker_qr_custom(request):
 
             temp_file.flush()
 
-            img = qr_code.make_image(image_factory=StyledPilImage, embedded_image_path=temp_file.name, embeded_image_ratio=0.2)
+            img = qr_code.make_image(image_factory=PilImage, embedded_image_path=temp_file.name, embeded_image_ratio=0.2)
 
     buffer = io.BytesIO()
 
